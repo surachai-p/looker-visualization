@@ -1,0 +1,1227 @@
+# ใบงานการทดลอง: สร้าง Dashboard ด้วย Looker Studio
+## สำหรับผู้บริหารโรงเรียน
+
+---
+
+## 🎯 วัตถุประสงค์ เพื่อให้นักศึกษาสามารถ
+1. นำเข้าข้อมูลจาก CSV/Google Sheets เข้า Looker Studio ได้
+2. เชื่อมโยงข้อมูล (Data Blending) ระหว่างตารางต่างๆ ได้
+3. สร้าง Dashboard 6 หน้า ตามมาตรฐานการบริหารโรงเรียนได้
+4. สร้าง Charts และ Metrics ที่ตอบโจทย์การบริหารจัดการได้
+
+---
+
+# 📝 ส่วนที่ 1: เตรียมข้อมูล 
+
+## Lab 1.1: อัปโหลดไฟล์ CSV ไปยัง Google Drive
+
+### ขั้นตอน:
+1. ✅ เปิด Google Drive (drive.google.com)
+2. ✅ สร้างโฟลเดอร์ชื่อ "Dashboard_School_Data"
+3. ✅ อัปโหลดไฟล์ CSV ทั้ง 7 ไฟล์:
+   - students.csv
+   - teachers.csv
+   - grades.csv
+   - attendance.csv
+   - budget.csv
+   - documents.csv
+   - subjects.csv
+
+### ผลลัพธ์ที่ควรได้:
+- [x] เห็นไฟล์ทั้ง 7 ไฟล์ใน Google Drive
+- [x] สามารถเปิดไฟล์ด้วย Google Sheets ได้
+
+---
+
+## Lab 1.2: แปลงไฟล์เป็น Google Sheets
+
+### ขั้นตอน:
+1. ✅ คลิกขวาที่ไฟล์ **students.csv**
+2. ✅ เลือก "Open with" → "Google Sheets"
+3. ✅ ไฟล์จะเปิดเป็น Google Sheets
+4. ✅ ทำซ้ำสำหรับไฟล์อื่นๆ ทั้ง 6 ไฟล์
+
+### เช็คความถูกต้อง:
+- [x] students.csv มี 60 แถว (ไม่นับ header)
+- [x] teachers.csv มี 25 แถว
+- [x] grades.csv มี 100 แถว
+- [x] attendance.csv มี 100 แถว
+- [x] budget.csv มี 35 แถว
+- [x] documents.csv มี 35 แถว
+- [x] subjects.csv มี 55 แถว
+
+### 💡 Tips:
+- ตรวจสอบว่าข้อมูลวันที่แสดงผลถูกต้อง (อาจต้องปรับ Format → Number → Date)
+- ตรวจสอบว่าตัวเลขไม่ถูกอ่านเป็น Text
+
+---
+
+# 📊 ส่วนที่ 2: เชื่อมต่อข้อมูลกับ Looker Studio 
+
+## Lab 2.1: สร้าง Report ใหม่
+
+### ขั้นตอน:
+1. ✅ เปิด Looker Studio (lookerstudio.google.com)
+2. ✅ คลิก "Create" → "Report"
+3. ✅ ระบบจะถามว่าต้องการเพิ่ม Data Source
+4. ✅ คลิก "Google Sheets"
+5. ✅ เลือก **students** sheet
+6. ✅ คลิก "Add"
+7. ✅ คลิก "Add to Report"
+
+### ผลลัพธ์ที่ควรได้:
+- [x] เห็นหน้า Report เปล่าๆ
+- [x] ด้านขวามือมี Data Panel แสดงฟิลด์จาก students table
+
+---
+
+## Lab 2.2: เพิ่ม Data Sources อื่นๆ
+
+### ขั้นตอน:
+1. ✅ คลิก "Resource" (เมนูบน) → "Manage added data sources"
+2. ✅ คลิก "+ Add a data source"
+3. ✅ เลือก "Google Sheets"
+4. ✅ เลือก **teachers** sheet → คลิก "Add"
+5. ✅ ทำซ้ำสำหรับ:
+   - grades
+   - attendance
+   - budget
+   - documents
+   - subjects
+
+### เช็คความถูกต้อง:
+- [x] ใน "Manage added data sources" เห็น Data Sources ทั้งหมด 7 ตัว
+- [x] แต่ละ Data Source แสดงจำนวนฟิลด์ที่ถูกต้อง
+
+---
+
+## Lab 2.3: ตรวจสอบ Field Types
+
+### ขั้นตอนสำคัญ - ต้องทำให้ถูกต้อง!
+
+1. ✅ คลิก "Resource" → "Manage added data sources"
+2. ✅ คลิกที่ **students** data source
+3. ✅ ตรวจสอบ Field Type ของแต่ละฟิลด์:
+
+| Field Name | Type ที่ถูกต้อง | วิธีแก้ถ้าผิด |
+|-----------|----------------|---------------|
+| student_id | Text | คลิกที่ ABC → เลือก Text |
+| student_name | Text | Text |
+| grade_level | Text | Text |
+| gender | Text | Text |
+| birth_date | Date | คลิกที่ Icon → เลือก Date |
+| enrollment_date | Date | คลิกที่ Icon → เลือ Date |
+| status | Text | Text |
+
+4. ✅ ทำซ้ำสำหรับ Data Sources อื่นๆ:
+
+**teachers:**
+- teacher_id → Text
+- hire_date → Date
+- experience_years → Number
+
+**grades:**
+- student_id → Text
+- subject_code → Text
+- midterm_score → Number
+- final_score → Number
+- total_score → Number
+- grade → Number
+- academic_year → Number
+
+**attendance:**
+- student_id → Text
+- date → Date
+- status → Text
+
+**budget:**
+- budget_allocated → Number
+- budget_spent → Number
+- budget_remaining → Number
+
+**documents:**
+- created_date → Date
+- approve_date_level1 → Date
+- approve_date_level2 → Date
+
+### ผลลัพธ์ที่ควรได้:
+- [x] ทุก Date field เป็น Date type
+- [x] ทุก Number field เป็น Number type
+- [x] ID fields เป็น Text type
+
+---
+
+# 🔗 ส่วนที่ 3: Blend Data
+
+## Lab 3.1: Blend ข้อมูลนักเรียนกับผลการเรียน
+
+### วัตถุประสงค์: 
+เชื่อมข้อมูลนักเรียนกับผลการเรียนเพื่อดู GPA ของแต่ละคน
+
+### ขั้นตอน:
+1. ✅ ที่หน้า Report คลิก "Add a chart"
+2. ✅ เลือก "Table" (ตารางธรรมดา)
+3. ✅ วาดตารางลงบน Canvas
+4. ✅ ที่ Data Panel ด้านขวา คลิกที่ชื่อ Data Source (ตรง "students")
+5. ✅ เลือก "Blend data"
+
+### Blend Configuration:
+6. ✅ Left Table: **students**
+   - Join Key: **student_id**
+   
+7. ✅ คลิก "+ Join another table"
+
+8. ✅ Right Table: **grades**
+   - Join Key: **student_id**
+   - Join Operator: **Left Outer** (เพื่อให้เห็นนักเรียนทุกคนแม้ยังไม่มีเกรด)
+
+9. ✅ คลิก "Save"
+
+### ตั้งค่า Table:
+10. ✅ ใน Dimension เลือก:
+    - student_name (จาก students)
+    - grade_level (จาก students)
+    - class_room (จาก students)
+
+11. ✅ ใน Metric เพิ่ม:
+    - AVG(grade) → เปลี่ยนชื่อเป็น "GPA"
+    - COUNT(record_id) → เปลี่ยนชื่อเป็น "จำนวนวิชา"
+
+### ผลลัพธ์ที่ควรได้:
+- [x] ตารางแสดงรายชื่อนักเรียนพร้อม GPA
+- [x] เห็น GPA ของนักเรียนแต่ละคน
+- [x] นักเรียนที่ยังไม่มีเกรดจะแสดง "No Data" หรือ 0
+
+### 🎨 Style the Table:
+12. ✅ คลิกที่ตาราง → ไปที่ "Style" tab
+13. ✅ เปิด "Show row numbers"
+14. ✅ เปิด "Table header" → ใส่สีพื้นหลัง
+15. ✅ เปิด "Compact numbers" สำหรับ GPA
+
+---
+
+## Lab 3.2: Blend แบบ 3 ตาราง - นักเรียน + ผลเรียน + วิชา
+
+### วัตถุประสงค์:
+แสดงว่านักเรียนแต่ละคนเรียนวิชาอะไรบ้าง และได้เกรดเท่าไหร่
+
+### ขั้นตอน:
+1. ✅ สร้าง Table ใหม่
+2. ✅ เลือก Data Source → Blend data
+
+### Blend Configuration:
+3. ✅ **Table 1: students**
+   - Join Key: student_id
+
+4. ✅ **Table 2: grades**
+   - Join Key: student_id
+   - Join Type: Left Outer
+
+5. ✅ คลิก "+ Join another table"
+
+6. ✅ **Table 3: subjects**
+   - Join Key: subject_code (จาก grades) = subject_code (จาก subjects)
+   - Join Type: Left Outer
+
+7. ✅ คลิก "Save"
+
+### ตั้งค่า Dimensions & Metrics:
+8. ✅ Dimensions:
+   - student_name (จาก students)
+   - grade_level (จาก students)
+   - subject_name (จาก subjects)
+   - teacher_id (จาก subjects)
+
+9. ✅ Metrics:
+   - AVG(total_score) → "คะแนนเฉลี่ย"
+   - AVG(grade) → "เกรดเฉลี่ย"
+
+### ผลลัพธ์ที่ควรได้:
+- [x] ตารางแสดงนักเรียน → วิชาที่เรียน → คะแนนและเกรด
+- [x] สามารถเห็นว่านักเรียนคนไหนเรียนวิชาอะไร ได้เกรดเท่าไหร่
+
+---
+
+## Lab 3.3: Blend ครูกับวิชาที่สอน
+
+### วัตถุประสงค์:
+แสดงว่าครูแต่ละคนสอนวิชาอะไรบ้าง มีนักเรียนกี่คน
+
+### ขั้นตอน:
+1. ✅ สร้าง Table ใหม่
+2. ✅ Blend data: **teachers** (Join Key: teacher_id) + **subjects** (Join Key: teacher_id)
+
+3. ✅ Dimensions:
+   - teacher_name (จาก teachers)
+   - subject_name (จาก subjects)
+   - position (จาก teachers)
+   - department (จาก teachers)
+
+4. ✅ Metrics:
+   - SUM(students_enrolled) → "จำนวนนักเรียนทั้งหมด"
+
+### ผลลัพธ์ที่ควรได้:
+- [x] แสดงครูแต่ละคนสอนวิชาอะไร
+- [x] มีนักเรียนรวมกี่คน
+
+---
+
+## Lab 3.4: Blend นักเรียนกับการเข้าเรียน
+
+### วัตถุประสงค์:
+คำนวณเปอร์เซ็นต์การเข้าเรียนของแต่ละคน
+
+### ขั้นตอน:
+1. ✅ สร้าง Table ใหม่
+2. ✅ Blend: **students** + **attendance** (Join Key: student_id)
+
+3. ✅ Dimensions:
+   - student_name
+   - grade_level
+   - class_room
+
+4. ✅ Metrics:
+   - Record Count → "จำนวนครั้งทั้งหมด"
+   - คลิก "Add a field" (ข้างล่างสุดของ Data panel)
+   - สร้าง Calculated Field:
+
+```
+ชื่อฟิลด์: มาเรียน
+Formula: 
+COUNTIF(status = "มาเรียน")
+```
+
+```
+ชื่อฟิลด์: เปอร์เซ็นต์เข้าเรียน
+Formula:
+COUNTIF(status = "มาเรียน") / COUNT(attendance_id) * 100
+```
+
+5. ✅ เพิ่ม Metrics:
+   - มาเรียน
+   - เปอร์เซ็นต์เข้าเรียน
+
+### ผลลัพธ์ที่ควรได้:
+- [x] ตารางแสดงนักเรียนแต่ละคน
+- [x] จำนวนครั้งที่มาเรียน
+- [x] เปอร์เซ็นต์การเข้าเรียน
+
+### 🎨 Style - Conditional Formatting:
+6. ✅ คลิกที่คอลัมน์ "เปอร์เซ็นต์เข้าเรียน"
+7. ✅ ไปที่ "Style" tab
+8. ✅ เปิด "Conditional formatting"
+9. ✅ ตั้งค่า:
+   - If value ≥ 90: สีเขียว
+   - If value 70-89: สีเหลือง
+   - If value < 70: สีแดง
+
+---
+
+## Lab 3.5: Blend งบประมาณตามแผนก
+
+### วัตถุประสงค์:
+สรุปงบประมาณแต่ละแผนก
+
+### ขั้นตอน:
+1. ✅ สร้าง Stacked Bar Chart
+2. ✅ Data Source: **budget** (ไม่ต้อง Blend)
+3. ✅ Dimension: department
+4. ✅ Breakdown Dimension: category
+5. ✅ Metric: SUM(budget_spent)
+
+### เพิ่ม Calculated Fields:
+```
+ชื่อฟิลด์: เปอร์เซ็นต์การใช้จ่าย
+Formula:
+SUM(budget_spent) / SUM(budget_allocated) * 100
+```
+
+### ผลลัพธ์ที่ควรได้:
+- [x] กราฟแท่งแสดงการใช้งบประมาณแต่ละแผนก
+- [x] แยกสีตามหมวดงบประมาณ
+
+---
+
+## Lab 3.6: Blend E-Document กับครู
+
+### วัตถุประสงค์:
+แสดงว่าครูแต่ละคนสร้างเอกสารอะไรบ้าง
+
+### ขั้นตอน:
+1. ✅ สร้าง Table
+2. ✅ Blend: **documents** + **teachers** 
+   - Join Key: created_by (จาก documents) = teacher_id (จาก teachers)
+
+3. ✅ Dimensions:
+   - teacher_name (จาก teachers)
+   - document_type (จาก documents)
+   - status (จาก documents)
+   - priority (จาก documents)
+
+4. ✅ Metrics:
+   - COUNT(document_id) → "จำนวนเอกสาร"
+
+### Calculated Field:
+```
+ชื่อฟิลด์: วันที่รออนุมัติ
+Formula:
+DATE_DIFF(CURRENT_DATE(), created_date)
+```
+
+### ผลลัพธ์ที่ควรได้:
+- [x] แสดงครูแต่ละคนสร้างเอกสารกี่ฉบับ
+- [x] แยกตามประเภทและสถานะ
+
+---
+
+# 📄 ส่วนที่ 4: สร้าง Dashboard (120 นาที)
+
+## Lab 4.1: Page 1 - ภาพรวมโรงเรียน
+
+### เตรียม Layout:
+1. ✅ เปลี่ยนชื่อหน้า: คลิก "Page 1" → เปลี่ยนเป็น "ภาพรวมโรงเรียน"
+2. ✅ เพิ่ม Header: Insert → Text → พิมพ์ "Dashboard โรงเรียน - ภาพรวม"
+3. ✅ ตั้งค่า Text: Font size 24, Bold, สีเข้ม
+
+### Scorecard 1: จำนวนนักเรียนทั้งหมด
+1. ✅ Insert → Scorecard
+2. ✅ Data Source: students
+3. ✅ Metric: COUNT(student_id)
+4. ✅ เปลี่ยนชื่อ: "จำนวนนักเรียน"
+5. ✅ Style: เปลี่ยนสีพื้นหลัง, ขนาดตัวเลขใหญ่ขึ้น
+
+### Scorecard 2: จำนวนครู
+1. ✅ คัดลอก Scorecard 1
+2. ✅ Data Source: teachers
+3. ✅ Metric: COUNT(teacher_id)
+4. ✅ เปลี่ยนชื่อ: "จำนวนครู"
+
+### Scorecard 3: GPA เฉลี่ย
+1. ✅ Scorecard ใหม่
+2. ✅ Data Source: grades
+3. ✅ Metric: AVG(grade)
+4. ✅ Format: ทศนิยม 2 ตำแหน่ง
+5. ✅ Comparison: เปรียบเทียบกับเดือนที่แล้ว (ถ้าต้องการ)
+
+### Scorecard 4: อัตราการเข้าเรียน
+1. ✅ Scorecard ใหม่
+2. ✅ Data Source: attendance
+3. ✅ Metric: ใช้ Calculated Field "เปอร์เซ็นต์เข้าเรียน" ที่สร้างไว้
+4. ✅ เพิ่มสัญลักษณ์ %
+
+### Scorecard 5: งบประมาณคงเหลือ
+1. ✅ Data Source: budget
+2. ✅ Calculated Field:
+```
+Formula: SUM(budget_remaining) / SUM(budget_allocated) * 100
+```
+
+### Scorecard 6: เอกสารรออนุมัติ
+1. ✅ Data Source: documents
+2. ✅ Metric: COUNT(document_id)
+3. ✅ Filter: status = "รอการอนุมัติ"
+
+### Pie Chart: สัดส่วนนักเรียนตามระดับชั้น
+1. ✅ Insert → Pie Chart
+2. ✅ Data Source: students
+3. ✅ Dimension: grade_level
+4. ✅ Metric: COUNT(student_id)
+5. ✅ Style: เลือก Color palette ที่สวยงาม
+
+### Bar Chart: จำนวนนักเรียนแต่ละห้อง
+1. ✅ Insert → Bar Chart (แนวนอน)
+2. ✅ Data Source: students
+3. ✅ Dimension: class_room
+4. ✅ Sort: จำนวนนักเรียน (มาก → น้อย)
+5. ✅ Metric: COUNT(student_id)
+
+### Table: สรุปข้อมูลแต่ละชั้น
+1. ✅ Insert → Table
+2. ✅ Blend: students + grades
+3. ✅ Dimensions:
+   - grade_level
+4. ✅ Metrics:
+   - COUNT(student_id) → "จำนวนนักเรียน"
+   - AVG(grade) → "GPA เฉลี่ย"
+
+### เพิ่ม Date Range Control:
+1. ✅ Insert → Date Range Control
+2. ✅ วางตำแหน่งด้านบนขวา
+3. ✅ ตั้งค่า: แสดงเป็นช่วงเดือน
+
+### ผลลัพธ์สำหรับ Page 1:
+- [x] มี Scorecards 6 ตัวแสดงด้านบน
+- [x] มี Pie Chart และ Bar Chart แสดงข้อมูลนักเรียน
+- [x] มี Table สรุปข้อมูล
+- [x] มี Date Range Control
+
+---
+
+## Lab 4.2: Page 2 - วิชาการและผลการเรียน
+
+### เพิ่มหน้าใหม่:
+1. ✅ คลิก "+ Add a page" (ด้านล่างซ้าย)
+2. ✅ เปลี่ยนชื่อ: "วิชาการและผลการเรียน"
+
+### Scorecards:
+1. ✅ **GPA เฉลี่ยโรงเรียน**
+   - Data: grades
+   - Metric: AVG(grade)
+
+2. ✅ **นักเรียน GPA >= 3.0**
+   - Blend: students + grades
+   - Filter: AVG(grade) >= 3.0
+   - Metric: COUNT(student_id)
+
+3. ✅ **นักเรียนต้องเสริม (GPA < 2.0)**
+   - Filter: AVG(grade) < 2.0
+   - Metric: COUNT(student_id)
+   - Style: สีแดง เพื่อเตือน
+
+### Bar Chart: คะแนนเฉลี่ยแต่ละวิชา
+1. ✅ Insert → Bar Chart
+2. ✅ Blend: grades + subjects
+3. ✅ Dimension: subject_name
+4. ✅ Metric: AVG(total_score)
+5. ✅ Sort: คะแนนเฉลี่ย (สูง → ต่ำ)
+
+### Stacked Bar Chart: การกระจายเกรด
+1. ✅ Insert → Stacked Bar Chart
+2. ✅ Data Source: grades
+3. ✅ Dimension: subject_name
+4. ✅ Breakdown Dimension: grade (ต้องแปลงเป็น Text ก่อน)
+5. ✅ Metric: COUNT(record_id)
+
+### Table: ผลการเรียนแต่ละห้อง
+1. ✅ Table ใหม่
+2. ✅ Blend: students + grades + subjects
+3. ✅ Dimensions:
+   - grade_level
+   - class_room
+4. ✅ Metrics:
+   - AVG(grade)
+   - AVG(midterm_score)
+   - AVG(final_score)
+
+### Conditional Formatting:
+5. ✅ คลิกคอลัมน์ AVG(grade)
+6. ✅ Style → Conditional formatting:
+   - >= 3.5: สีเขียวเข้ม
+   - 3.0-3.49: สีเขียวอ่อน
+   - 2.5-2.99: สีเหลือง
+   - 2.0-2.49: สีส้ม
+   - < 2.0: สีแดง
+
+### Combo Chart: เปรียบเทียบคะแนนกลางภาค-ปลายภาค
+1. ✅ Insert → Combo Chart
+2. ✅ Blend: grades + subjects
+3. ✅ Dimension: subject_name
+4. ✅ Metric 1 (Bar): AVG(midterm_score)
+5. ✅ Metric 2 (Line): AVG(final_score)
+
+### Table: นักเรียนที่ต้องเสริม
+1. ✅ Table ใหม่
+2. ✅ Blend: students + grades
+3. ✅ Filter: AVG(grade) < 2.0
+4. ✅ Dimensions:
+   - student_name
+   - grade_level
+   - class_room
+5. ✅ Metrics:
+   - AVG(grade) → format 2 ทศนิยม
+   - COUNT(record_id) → "จำนวนวิชา"
+
+### Filters สำหรับ Page นี้:
+1. ✅ Insert → Drop-down list
+2. ✅ เพิ่ม Filters:
+   - grade_level (ระดับชั้น)
+   - subject_name (วิชา)
+   - semester (ภาคเรียน)
+
+---
+
+## Lab 4.3: Page 3 - การเข้าเรียนและพฤติกรรม
+
+### เพิ่มหน้าใหม่:
+1. ✅ "+ Add a page" → "การเข้าเรียน"
+
+### Scorecards:
+1. ✅ **เปอร์เซ็นต์เข้าเรียนเฉลี่ย**
+   - ใช้ Calculated Field ที่สร้างไว้
+
+2. ✅ **นักเรียนขาดบ่อย (>3 ครั้ง)**
+   - Calculated Field:
+```
+Formula: COUNTIF(status = "ขาดเรียน")
+```
+   - Filter: COUNTIF > 3
+
+3. ✅ **การมาสายทั้งหมด**
+   - Metric: COUNTIF(status = "มาสาย")
+
+### Time Series: อัตราการเข้าเรียนรายวัน
+1. ✅ Insert → Time Series Chart
+2. ✅ Data Source: attendance
+3. ✅ Date Range Dimension: date
+4. ✅ Metric: 
+```
+Calculated Field: อัตราเข้าเรียน
+Formula: COUNTIF(status = "มาเรียน") / COUNT(attendance_id) * 100
+```
+5. ✅ Style: Line ให้หนาขึ้น, เพิ่มจุดข้อมูล
+
+### Stacked Column Chart: สถานะการเข้าเรียน
+1. ✅ Insert → Stacked Column Chart
+2. ✅ Dimension: date
+3. ✅ Breakdown Dimension: status
+4. ✅ Metric: COUNT(attendance_id)
+5. ✅ Color:
+   - มาเรียน: สีเขียว
+   - ขาดเรียน: สีแดง
+   - มาสาย: สีส้ม
+   - ลากิจ/ลาป่วย: สีเหลือง
+
+### Bar Chart: จำนวนการขาดแต่ละห้อง
+1. ✅ Bar Chart
+2. ✅ Blend: students + attendance
+3. ✅ Filter: status = "ขาดเรียน"
+4. ✅ Dimension: class_room
+5. ✅ Metric: COUNT(attendance_id)
+
+### Pie Chart: เหตุผลการขาดเรียน
+1. ✅ Pie Chart
+2. ✅ Data Source: attendance
+3. ✅ Filter: status != "มาเรียน"
+4. ✅ Dimension: reason
+5. ✅ Metric: COUNT(attendance_id)
+
+### Table: นักเรียนที่มีปัญหาการเข้าเรียน
+1. ✅ Table
+2. ✅ Blend: students + attendance
+3. ✅ Dimensions:
+   - student_name
+   - grade_level
+   - class_room
+4. ✅ Metrics:
+   - COUNT(attendance_id) → "ครั้งทั้งหมด"
+   - COUNTIF(status = "มาเรียน") → "มาเรียน"
+   - COUNTIF(status = "ขาดเรียน") → "ขาด"
+   - COUNTIF(status = "มาสาย") → "สาย"
+   - เปอร์เซ็นต์เข้าเรียน
+5. ✅ Sort: จำนวนขาด (มาก → น้อย)
+6. ✅ Filter: เปอร์เซ็นต์เข้าเรียน < 90
+
+### Conditional Formatting:
+- เปอร์เซ็นต์เข้าเรียน:
+  - >= 95: เขียวเข้ม
+  - 90-94: เขียวอ่อน
+  - 80-89: เหลือง
+  - < 80: แดง
+
+---
+
+## Lab 4.4: Page 4 - งานบุคลากร
+
+### เพิ่มหน้าใหม่:
+1. ✅ "+ Add a page" → "งานบุคลากร"
+
+### Scorecards:
+1. ✅ **จำนวนครูทั้งหมด**
+   - COUNT(teacher_id)
+   - Filter: position CONTAINS "ครู"
+
+2. ✅ **บุคลากรสนับสนุน**
+   - COUNT(teacher_id)
+   - Filter: position NOT CONTAINS "ครู"
+
+3. ✅ **อัตราส่วนครู:นักเรียน**
+   - Calculated Field:
+```
+Formula: 
+(SELECT COUNT(student_id) FROM students) / (SELECT COUNT(teacher_id) FROM teachers WHERE position CONTAINS "ครู")
+```
+   (หรือคำนวณด้วยตัวเลขที่ได้: 60 นักเรียน / 20 ครู = 3.0)
+
+### Pie Chart: สัดส่วนครูแต่ละกลุ่มสาระ
+1. ✅ Pie Chart
+2. ✅ Data Source: teachers
+3. ✅ Filter: department = "วิชาการ"
+4. ✅ Dimension: subject
+5. ✅ Metric: COUNT(teacher_id)
+
+### Bar Chart: ครูแยกตามวุฒิการศึกษา
+1. ✅ Bar Chart (แนวนอน)
+2. ✅ Dimension: education_level
+3. ✅ Metric: COUNT(teacher_id)
+4. ✅ Sort: ปริญญาเอก, ปริญญาโท, ปริญญาตรี, ปวช.
+
+### Column Chart: ครูแยกตามวิทยฐานะ
+1. ✅ Column Chart
+2. ✅ Dimension: salary_level
+3. ✅ Metric: COUNT(teacher_id)
+4. ✅ Sort Order: กำหนดเอง
+   - ครูเชี่ยวชาญ
+   - ครูชำนาญการพิเศษ
+   - ครูชำนาญการ
+   - ครู
+
+### Donut Chart: อายุงาน
+1. ✅ Donut Chart
+2. ✅ Calculated Field:
+```
+ชื่อ: กลุ่มอายุงาน
+Formula:
+CASE
+  WHEN experience_years <= 5 THEN "0-5 ปี"
+  WHEN experience_years <= 10 THEN "6-10 ปี"
+  WHEN experience_years <= 15 THEN "11-15 ปี"
+  WHEN experience_years <= 20 THEN "16-20 ปี"
+  ELSE "20+ ปี"
+END
+```
+3. ✅ Dimension: กลุ่มอายุงาน
+4. ✅ Metric: COUNT(teacher_id)
+
+### Table: รายชื่อครูพร้อมข้อมูล
+1. ✅ Table
+2. ✅ Blend: teachers + subjects (Left Outer Join)
+3. ✅ Dimensions:
+   - teacher_name
+   - subject
+   - position
+   - salary_level
+   - experience_years
+   - department
+4. ✅ Metrics:
+   - COUNT(subject_code) → "จำนวนวิชาที่สอน"
+   - SUM(students_enrolled) → "จำนวนนักเรียนทั้งหมด"
+
+---
+
+## Lab 4.5: Page 5 - งบประมาณและการเงิน
+
+### เพิ่มหน้าใหม่:
+1. ✅ "+ Add a page" → "งบประมาณและการเงิน"
+
+### Scorecards:
+1. ✅ **งบประมาณทั้งหมด**
+   - SUM(budget_allocated)
+   - Format: เพิ่มเครื่องหมาย ฿
+
+2. ✅ **งบประมาณที่ใช้ไป**
+   - SUM(budget_spent)
+
+3. ✅ **งบประมาณคงเหลือ**
+   - SUM(budget_remaining)
+
+4. ✅ **% การใช้จ่าย**
+   - Calculated Field:
+```
+Formula: SUM(budget_spent) / SUM(budget_allocated) * 100
+```
+
+### Gauge Chart: เปอร์เซ็นต์การใช้จ่าย
+1. ✅ Insert → Gauge Chart
+2. ✅ Metric: เปอร์เซ็นต์การใช้จ่าย
+3. ✅ Style:
+   - Min: 0
+   - Max: 100
+   - สีเขียว: 0-60%
+   - สีเหลือง: 61-80%
+   - สีแดง: 81-100%
+
+### Stacked Bar Chart: งบแต่ละหมวด
+1. ✅ Stacked Bar Chart (แนวนอน)
+2. ✅ Dimension: category
+3. ✅ Metrics (ใช้ 3 metrics):
+   - SUM(budget_allocated) → สีฟ้าอ่อน
+   - SUM(budget_spent) → สีน้ำเงิน
+   - SUM(budget_remaining) → สีเทา
+
+หรือใช้ Calculated Field แทน:
+```
+ชื่อ: ประเภทงบ
+Formula:
+CASE
+  WHEN metric = "allocated" THEN SUM(budget_allocated)
+  WHEN metric = "spent" THEN SUM(budget_spent)
+  WHEN metric = "remaining" THEN SUM(budget_remaining)
+END
+```
+
+### Pie Chart: สัดส่วนงบแต่ละแผนก
+1. ✅ Pie Chart
+2. ✅ Dimension: department
+3. ✅ Metric: SUM(budget_spent)
+
+### Waterfall Chart: การเปลี่ยนแปลงงบประมาณ
+1. ✅ Insert → Waterfall Chart
+2. ✅ Dimension: category
+3. ✅ Metric: SUM(budget_spent)
+4. ✅ Style: ปรับสีให้สวยงาม
+
+### Time Series: แนวโน้มการใช้จ่ายรายเดือน
+1. ✅ Time Series Chart
+2. ✅ Date Range Dimension: month
+3. ✅ Metric: SUM(budget_spent)
+4. ✅ Breakdown Dimension: category (เพื่อดูว่าใช้ไปที่ไหนบ้าง)
+
+### Table with Progress Bars:
+1. ✅ Table
+2. ✅ Dimensions:
+   - category
+   - sub_category
+   - department
+3. ✅ Metrics:
+   - SUM(budget_allocated)
+   - SUM(budget_spent)
+   - SUM(budget_remaining)
+   - เปอร์เซ็นต์การใช้จ่าย
+
+4. ✅ Style → Data Bars:
+   - เปิด "Show bars" สำหรับคอลัมน์ %การใช้จ่าย
+   - Min: 0, Max: 100
+   - สี: Gradient จากเขียว → แดง
+
+### Filters:
+1. ✅ Drop-down:
+   - budget_year (ปีงบประมาณ)
+   - category (หมวดงบ)
+   - department (แผนก)
+   - status (สถานะ)
+
+---
+
+## Lab 4.6: Page 6 - E-Document และการอนุมัติ
+
+### เพิ่มหน้าใหม่:
+1. ✅ "+ Add a page" → "E-Document"
+
+### Scorecards:
+1. ✅ **เอกสารทั้งหมด**
+   - COUNT(document_id)
+
+2. ✅ **รออนุมัติ**
+   - Filter: status = "รอการอนุมัติ"
+   - Style: สีส้ม
+
+3. ✅ **อนุมัติแล้ว**
+   - Filter: status = "อนุมัติแล้ว"
+   - Style: สีเขียว
+
+4. ✅ **เอกสารร่าง**
+   - Filter: status = "ร่าง"
+
+5. ✅ **เอกสารด่วนรออนุมัติ**
+   - Filter: status = "รอการอนุมัติ" AND priority IN ("ด่วน", "ด่วนที่สุด")
+   - Style: สีแดง, เตือนด้วย Border
+
+### Funnel Chart: สถานะเอกสาร
+1. ✅ Insert → Pie Chart (ปรับเป็น Funnel ถ้ามี)
+2. ✅ Dimension: status
+3. ✅ Metric: COUNT(document_id)
+4. ✅ Sort Order:
+   - ร่าง
+   - รอการอนุมัติ
+   - อนุมัติแล้ว
+
+### Stacked Column Chart: เอกสารแต่ละประเภท
+1. ✅ Stacked Column Chart
+2. ✅ Dimension: document_type
+3. ✅ Breakdown Dimension: status
+4. ✅ Metric: COUNT(document_id)
+5. ✅ Color:
+   - ร่าง: เทา
+   - รอการอนุมัติ: ส้ม
+   - อนุมัติแล้ว: เขียว
+
+### Time Series: เอกสารที่สร้างรายวัน
+1. ✅ Time Series Chart
+2. ✅ Date Range Dimension: created_date
+3. ✅ Metric: COUNT(document_id)
+
+### Bar Chart: เอกสารแต่ละแผนก
+1. ✅ Bar Chart
+2. ✅ Blend: documents + teachers
+3. ✅ Dimension: department (จาก teachers)
+4. ✅ Metric: COUNT(document_id)
+
+### Pie Chart: ประเภทเอกสาร
+1. ✅ Pie Chart
+2. ✅ Dimension: document_type
+3. ✅ Metric: COUNT(document_id)
+
+### Table: เอกสารรออนุมัติ
+1. ✅ Table
+2. ✅ Blend: documents + teachers
+3. ✅ Filter: status = "รอการอนุมัติ"
+4. ✅ Dimensions:
+   - document_title
+   - document_type
+   - teacher_name (ผู้สร้าง)
+   - created_date
+   - priority
+   - department
+5. ✅ Calculated Field:
+```
+ชื่อ: วันที่รอ
+Formula: DATE_DIFF(CURRENT_DATE(), created_date)
+```
+6. ✅ Sort: วันที่รอ (มาก → น้อย)
+
+### Conditional Formatting สำหรับ Table:
+- priority คอลัมน์:
+  - "ด่วนที่สุด": พื้นหลังสีแดง, ตัวอักษรสีขาว
+  - "ด่วน": พื้นหลังสีส้ม
+  - "ปกติ": ไม่ระบายสี
+- วันที่รอ คอลัมน์:
+  - > 7 วัน: สีแดง
+  - 4-7 วัน: สีเหลือง
+  - < 4 วัน: สีเขียว
+
+### Bar Chart: ระยะเวลาเฉลี่ยการอนุมัติ
+1. ✅ Bar Chart
+2. ✅ Filter: status = "อนุมัติแล้ว"
+3. ✅ Dimension: document_type
+4. ✅ Calculated Field:
+```
+ชื่อ: ระยะเวลาอนุมัติ (วัน)
+Formula:
+DATE_DIFF(approve_date_level2, created_date)
+```
+หรือถ้าไม่มี level2:
+```
+Formula:
+DATE_DIFF(
+  COALESCE(approve_date_level2, approve_date_level1), 
+  created_date
+)
+```
+5. ✅ Metric: AVG(ระยะเวลาอนุมัติ)
+
+### Filters สำหรับหน้านี้:
+1. ✅ Date Range Control (ช่วงวันที่สร้างเอกสาร)
+2. ✅ Drop-down Filters:
+   - status
+   - document_type
+   - priority
+   - department
+
+---
+
+# 🎨 ส่วนที่ 5: Styling และ Customization (30 นาที)
+
+## Lab 5.1: Theme และ Colors
+
+### สร้าง Theme ของโรงเรียน:
+1. ✅ คลิก "Theme and layout" (เมนูบน)
+2. ✅ เลือก Theme ที่ต้องการ หรือสร้างใหม่
+3. ✅ กำหนดสีประจำโรงเรียน:
+   - Primary Color: สีหลักของโรงเรียน
+   - Secondary Color: สีรอง
+   - Background: สีพื้นหลัง (แนะนำ สีอ่อนๆ เช่น #F5F5F5)
+
+### ปรับแต่งแต่ละหน้า:
+4. ✅ เพิ่ม Logo โรงเรียนทุกหน้า:
+   - Insert → Image
+   - Upload logo
+   - วางที่มุมบนซ้ายทุกหน้า
+
+5. ✅ เพิ่ม Header แต่ละหน้าให้สวยงาม:
+   - Insert → Rectangle (วาดเป็นแถบสี)
+   - Insert → Text (ชื่อหน้า)
+   - จัดวางให้สวย
+
+---
+
+## Lab 5.2: Navigation และ User Experience
+
+### สร้างเมนูนำทาง:
+1. ✅ Page 1: เพิ่ม Text หรือ Button เป็นเมนู
+   - ใช้ Rectangle + Text
+   - Link ไปแต่ละหน้า
+   
+หรือ
+
+2. ✅ ใช้ Page Navigation ของ Looker Studio:
+   - View → Show page navigation
+   - ระบบจะสร้างแท็บอัตโนมัติ
+
+### เพิ่ม Instructions:
+3. ✅ หน้าแรก เพิ่ม Text Box:
+   - "วิธีใช้งาน Dashboard นี้"
+   - อธิบายสั้นๆ ว่าแต่ละหน้ามีอะไรบ้าง
+
+---
+
+## Lab 5.3: Interactive Features
+
+### Cross-filtering:
+1. ✅ เลือก Chart ใดๆ
+2. ✅ ไปที่ "Setup" tab
+3. ✅ เปิด "Enable interactions"
+4. ✅ ทดสอบ: คลิกที่กราฟ → Charts อื่นควรถูก filter ตาม
+
+### Drill Down:
+1. ✅ เลือก Chart ที่ต้องการ
+2. ✅ Setup → เพิ่ม Dimension หลายอัน
+   - เช่น: grade_level → class_room → student_name
+3. ✅ เปิด "Enable drill down"
+4. ✅ ทดสอบ: คลิกขวา → Drill down
+
+---
+
+# ✅ ส่วนที่ 6: Testing และ Validation (15 นาที)
+
+## Checklist สำหรับทุกหน้า:
+
+### Page 1: ภาพรวมโรงเรียน
+- [ ] Scorecards ทั้งหมดแสดงค่าถูกต้อง
+- [ ] Pie Chart แสดงสัดส่วนถูกต้อง (รวม 100%)
+- [ ] Bar Chart เรียงลำดับถูกต้อง
+- [ ] Table แสดงข้อมูลครบ
+- [ ] Date Range Control ทำงานได้
+
+### Page 2: วิชาการและผลการเรียน
+- [ ] GPA เฉลี่ยอยู่ในช่วง 0-4
+- [ ] Bar Chart แสดงคะแนนแต่ละวิชาถูกต้อง
+- [ ] Conditional formatting แสดงสีถูกต้อง
+- [ ] Table นักเรียนที่ต้องเสริมแสดงเฉพาะ GPA < 2.0
+- [ ] Filters ทำงานได้
+
+### Page 3: การเข้าเรียน
+- [ ] เปอร์เซ็นต์เข้าเรียนถูกต้อง
+- [ ] Time Series แสดงแนวโน้มชัดเจน
+- [ ] Stacked Column Chart แสดงสัดส่วนถูกต้อง
+- [ ] Table นักเรียนปัญหาแสดงเฉพาะที่เข้าเรียน < 90%
+
+### Page 4: งานบุคลากร
+- [ ] จำนวนครูถูกต้อง
+- [ ] Charts แสดงการกระจายข้อมูลถูกต้อง
+- [ ] Table แสดงข้อมูลครูครบถ้วน
+
+### Page 5: งบประมาณ
+- [ ] Scorecards งบประมาณรวมถูกต้อง
+- [ ] Gauge Chart แสดง % ถูกต้อง
+- [ ] Table มี Data Bars แสดง
+- [ ] Time Series แสดงแนวโน้มได้
+
+### Page 6: E-Document
+- [ ] Scorecards นับจำนวนเอกสารถูกต้อง
+- [ ] Table เอกสารรออนุมัติมี Conditional formatting
+- [ ] Filters ทำงานได้ถูกต้อง
+- [ ] Charts แสดงสถานะเอกสารชัดเจน
+
+---
+
+# 📤 ส่วนที่ 7: Sharing และ Export (10 นาที)
+
+## Lab 7.1: แชร์ Dashboard
+
+### วิธีที่ 1: แชร์ผ่าน Link
+1. ✅ คลิก "Share" (ด้านบนขวา)
+2. ✅ ตั้งค่าสิทธิ์:
+   - "Can view": ดูได้อย่างเดียว
+   - "Can edit": แก้ไขได้
+3. ✅ คัดลอก Link แชร์ให้ผู้บริหาร
+
+### วิธีที่ 2: Embed ลงในเว็บไซต์
+1. ✅ คลิก "Share" → "Embed"
+2. ✅ คัดลอก iframe code
+3. ✅ นำไปใส่ในเว็บไซต์โรงเรียน
+
+### วิธีที่ 3: Schedule Email
+1. ✅ คลิก "Share" → "Schedule email delivery"
+2. ✅ ตั้งค่า:
+   - ผู้รับ: อีเมล์ผู้บริหาร
+   - ความถี่: ทุกวัน/สัปดาห์/เดือน
+   - Format: PDF
+
+---
+
+## Lab 7.2: Export ข้อมูล
+
+### Export เป็น PDF:
+1. ✅ คลิก "..." (มุมบนขวา)
+2. ✅ เลือก "Download as PDF"
+3. ✅ ตั้งค่า:
+   - Page: All pages
+   - Layout: Landscape (แนวนอน)
+   - Include data table: ไม่ต้องเลือก
+
+### Export ข้อมูลจาก Chart:
+1. ✅ คลิกที่ Chart ใดๆ
+2. ✅ คลิก "..." (มุมบนขวาของ Chart)
+3. ✅ เลือก "Export"
+4. ✅ เลือก Format:
+   - CSV: สำหรับนำไปใช้ต่อ
+   - Google Sheets: สำหรับแก้ไขต่อ
+
+---
+
+# 🎯 ส่วนที่ 8: Advanced Features (ถ้ามีเวลา)
+
+## Lab 8.1: Calculated Fields ขั้นสูง
+
+### Calculated Field 1: ระดับผลการเรียน
+```
+ชื่อ: ระดับผลเรียน
+Formula:
+CASE
+  WHEN AVG(grade) >= 3.5 THEN "ดีเยี่ยม"
+  WHEN AVG(grade) >= 3.0 THEN "ดี"
+  WHEN AVG(grade) >= 2.5 THEN "ปานกลาง"
+  WHEN AVG(grade) >= 2.0 THEN "อ่อน"
+  ELSE "ต้องเสริม"
+END
+```
+
+### Calculated Field 2: สถานะงบประมาณ
+```
+ชื่อ: สถานะงบ
+Formula:
+CASE
+  WHEN (SUM(budget_spent) / SUM(budget_allocated) * 100) < 60 THEN "ปลอดภัย"
+  WHEN (SUM(budget_spent) / SUM(budget_allocated) * 100) < 80 THEN "ควรระวัง"
+  ELSE "ใกล้หมด"
+END
+```
+
+### Calculated Field 3: จำนวนวันที่รออนุมัติ (สำหรับเอกสาร)
+```
+ชื่อ: จำนวนวันรอ
+Formula:
+DATE_DIFF(CURRENT_DATE(), created_date)
+```
+
+---
+
+## Lab 8.2: Data Blending ขั้นสูง
+
+### Blend 4 ตาราง: นักเรียน + เกรด + การเข้าเรียน + วิชา
+1. ✅ สร้าง Table ใหม่
+2. ✅ Blend Data:
+   - students (student_id)
+   - grades (student_id)
+   - attendance (student_id)
+   - subjects (subject_code from grades)
+
+3. ✅ Dimensions:
+   - student_name
+   - subject_name
+   - teacher_name (จาก subjects)
+
+4. ✅ Metrics:
+   - AVG(grade)
+   - เปอร์เซ็นต์เข้าเรียน
+   - AVG(total_score)
+
+### ผลลัพธ์:
+- เห็นภาพรวมของนักเรียนแต่ละคนในแต่ละวิชา
+- GPA + การเข้าเรียน + ครูผู้สอน
+
+---
+
+## Lab 8.3: Parameters และ Dynamic Controls
+
+### สร้าง Parameter:
+1. ✅ Resource → Manage Parameters
+2. ✅ "+ Create Parameter"
+3. ✅ ตั้งค่า Parameter:
+   - Name: เกณฑ์ GPA
+   - Data Type: Number
+   - Default Value: 2.0
+   - Allowed Values: 1.0, 1.5, 2.0, 2.5, 3.0
+
+### ใช้ Parameter ใน Calculated Field:
+```
+Formula:
+CASE
+  WHEN AVG(grade) < @เกณฑ์_GPA THEN "ต่ำกว่าเกณฑ์"
+  ELSE "ผ่านเกณฑ์"
+END
+```
+
+### เพิ่ม Control:
+1. ✅ Insert → Drop-down list
+2. ✅ Control Field: เกณฑ์ GPA parameter
+
+ผู้ใช้สามารถเปลี่ยนเกณฑ์ได้เองผ่าน UI!
+
+---
+
+# 📋 สรุปและการบ้าน
+
+## สิ่งที่ได้เรียนรู้:
+✅ การนำเข้าข้อมูล CSV เข้า Looker Studio
+✅ การสร้าง Data Sources
+✅ การ Blend Data ระหว่างตารางต่างๆ
+✅ การสร้าง Charts หลากหลายประเภท
+✅ การใช้ Calculated Fields
+✅ การตั้งค่า Conditional Formatting
+✅ การสร้าง Dashboard 6 หน้าครบถ้วน
+✅ การแชร์และ Export Dashboard
+
+## การบ้าน:
+
+### ระดับพื้นฐาน:
+1. ✅ ปรับแต่ง Theme ให้เหมาะกับโรงเรียนของคุณ
+2. ✅ เพิ่ม Logo โรงเรียนทุกหน้า
+3. ✅ เปลี่ยนสีของ Charts ให้สวยงาม
+
+### ระดับกลาง:
+4. ✅ สร้าง Calculated Field เพิ่มเติม 3 อัน
+5. ✅ เพิ่ม Page ใหม่ 1 หน้า เช่น "กิจกรรมนักเรียน"
+6. ✅ สร้าง Cross-filtering ระหว่าง Charts
+
+### ระดับสูง:
+7. ✅ นำข้อมูลจริงของโรงเรียนมาใช้
+8. ✅ สร้าง Dashboard เพิ่มเติมสำหรับแต่ละแผนก
+9. ✅ ตั้งค่า Schedule Email รายงานอัตโนมัติ
+
+---
+
+# 🆘 Troubleshooting
+
+## ปัญหาที่พบบ่อย:
+
+### ปัญหา 1: Blend ไม่ได้
+**สาเหตุ:** Join Key ไม่ตรงกัน
+**แก้ไข:** 
+- ตรวจสอบว่า Field Type ตรงกันหรือไม่ (เช่น ทั้งคู่เป็น Text)
+- ตรวจสอบชื่อฟิลด์ว่าเขียนถูกต้อง
+
+### ปัญหา 2: Chart ไม่แสดงข้อมูล
+**สาเหตุ:** Filter ซ้อน หรือ Data Type ผิด
+**แก้ไข:**
+- ตรวจสอบ Filters ทั้งหมด
+- ตรวจสอบ Date Range Control
+- ตรวจสอบ Field Type
+
+### ปัญหา 3: Calculated Field Error
+**สาเหตุ:** Syntax ผิด
+**แก้ไข:**
+- ตรวจสอบวงเล็บให้ครบ
+- ใช้ AVG(), SUM() ให้ถูกต้อง
+- ตรวจสอบชื่อฟิลด์
+
+### ปัญหา 4: ข้อมูลไม่ Update
+**สาเหตุ:** Google Sheets ยังไม่ Sync
+**แก้ไข:**
+- Resource → Manage data sources → Refresh fields
+- หรือรอสักครู่
+
+
+---
+
+# 🎉 ขอแสดงความยินดี!
+
+คุณได้สร้าง Dashboard สำหรับโรงเรียนเสร็จสมบูรณ์แล้ว!
+
+Dashboard นี้จะช่วย:
+✅ ผู้บริหารตัดสินใจได้เร็วขึ้น
+✅ ติดตามผลการดำเนินงานแบบ Real-time
+✅ ประหยัดเวลาในการทำรายงาน
+✅ เพิ่มความโปร่งใสในการบริหารจัดการ
+
+**Happy Data Visualization! 📊🎓**
