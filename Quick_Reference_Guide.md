@@ -363,10 +363,4 @@ QUARTER(date_field)
 
 ---
 
-**จัดทำโดย:** Claude AI  
-**วันที่:** สำหรับการสอน Dashboard Looker Studio  
-**เวอร์ชัน:** 1.0
-
----
-
 ✨ **Happy Dashboard Building!** ✨
