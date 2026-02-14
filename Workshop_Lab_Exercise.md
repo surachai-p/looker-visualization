@@ -168,14 +168,19 @@
 ### Blend Configuration:
 6. ✅ Left Table: **students**
    - Join Key: **student_id**
+   - เลือก Dimensions ทุกฟิลด์ที่ต้องการนำไปใช้งาน โดยการเลือก Add dimension (เลือกได้ 10 dimension)
    
 7. ✅ คลิก "+ Join another table"
 
 8. ✅ Right Table: **grades**
    - Join Key: **student_id**
-   - Join Operator: **Left Outer** (เพื่อให้เห็นนักเรียนทุกคนแม้ยังไม่มีเกรด)
+   - เลือก Dimensions ทุกฟิลด์ที่ต้องการนำไปใช้งาน โดยการเลือก Add dimension (เลือกได้ 10 dimension)
+   - เลือก condition ของการ join แบบ **Left Outer** (เพื่อให้เห็นนักเรียนทุกคน แม้ยังไม่มีเกรด)
+   - ตรวจสอบ Join condition เป็นการ join ระหว่าง student_id ของ Table1 กับ student_id ของ Table2
+   - กดปุ่ม Save เพื่อออกจากหน้า Join configuration
+   - ตั้งชื่อ Blened Data เป็น Students_Grades
 
-9. ✅ คลิก "Save"
+9. ✅ คลิก "Save" หลังจากนั้น กดปุุ่ม CLOSE เพื่อกลับไปหน้า Report
 
 ### ตั้งค่า Table:
 10. ✅ ใน Dimension เลือก:
@@ -184,13 +189,18 @@
     - class_room (จาก students)
 
 11. ✅ ใน Metric เพิ่ม:
-    - AVG(grade) → เปลี่ยนชื่อเป็น "GPA"
-    - COUNT(record_id) → เปลี่ยนชื่อเป็น "จำนวนวิชา"
+    - กดปุ่ม Add metric
+    - เลือก Add calculated field เพื่อสร้างฟิลด์ใหม่ที่นำข้อมูลจากฟิลด์เดิมมาคำนวณ
+    - กำหนดชื่อเป็น GPA
+    - ในช่อง Formula ใส่สูตรคือ AVG(grade)
+    - กดปุ่ม Apply หลังจากนั้นกดที่ส่วนอื่นของหน้าจอ เพื่อกลับมาหน้าจอหลัก
+    - เพิ่ม Metric เพื่อแสดงจำนวนวิชา
+    - กำหนด Formula คือ COUNT(record_id)
 
 ### ผลลัพธ์ที่ควรได้:
 - [x] ตารางแสดงรายชื่อนักเรียนพร้อม GPA
 - [x] เห็น GPA ของนักเรียนแต่ละคน
-- [x] นักเรียนที่ยังไม่มีเกรดจะแสดง "No Data" หรือ 0
+- [x] นักเรียนที่ยังไม่มีเกรดจะแสดง "null"
 
 ### 🎨 Style the Table:
 12. ✅ คลิกที่ตาราง → ไปที่ "Style" tab
