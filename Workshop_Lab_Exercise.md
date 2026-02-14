@@ -259,7 +259,7 @@
 
 ### ขั้นตอน:
 1. ✅ สร้าง Table ใหม่
-2. ✅ Blend data: **teachers** (Join Key: teacher_id) + **subjects** (Join Key: teacher_id)
+2. ✅ Blend data: **teachers** (Join Key: teacher_id) + **subjects** (Join Key: teacher_id)  เลือก Join type เป็น inner join
 
 3. ✅ Dimensions:
    - teacher_name (จาก teachers)
@@ -292,22 +292,22 @@
 
 4. ✅ Metrics:
    - Record Count → "จำนวนครั้งทั้งหมด"
-   - คลิก "Add a field" (ข้างล่างสุดของ Data panel)
-   - สร้าง Calculated Field:
+   - คลิก "Add metric" -> Add calculated field
+     สร้าง Calculated Field:
 
 ```
 ชื่อฟิลด์: มาเรียน
 Formula: 
-COUNTIF(status = "มาเรียน")
+SUM(CASE WHEN status = "มาเรียน" THEN 1 ELSE 0 END)
 ```
 
 ```
 ชื่อฟิลด์: เปอร์เซ็นต์เข้าเรียน
 Formula:
-COUNTIF(status = "มาเรียน") / COUNT(attendance_id) * 100
+SUM(CASE WHEN status = "มาเรียน" THEN 1 ELSE 0 END) / COUNT(attendance_id) * 100
 ```
 
-5. ✅ เพิ่ม Metrics:
+5. ✅ เพิ่ม Metrics: ในตาราง
    - มาเรียน
    - เปอร์เซ็นต์เข้าเรียน
 
@@ -317,13 +317,14 @@ COUNTIF(status = "มาเรียน") / COUNT(attendance_id) * 100
 - [x] เปอร์เซ็นต์การเข้าเรียน
 
 ### 🎨 Style - Conditional Formatting:
-6. ✅ คลิกที่คอลัมน์ "เปอร์เซ็นต์เข้าเรียน"
 7. ✅ ไปที่ "Style" tab
-8. ✅ เปิด "Conditional formatting"
-9. ✅ ตั้งค่า:
-   - If value ≥ 90: สีเขียว
-   - If value 70-89: สีเหลือง
-   - If value < 70: สีแดง
+8. ✅ เปิด "Conditional formatting" กด Add formatting
+9. เลือกฟิลด์ "ร้อยละการเข้าเรียน"
+10. สร้างเงื่อนไข 3 เงื่อนไข
+11. ✅ ตั้งค่า:
+   - ร้อยละการเข้าเรียน ≥ 90: สีเขียว
+   - ร้อยละการเข้าเรียน >=70 and ร้อยละการเข้าเรียน <=89 : สีเหลือง
+   - ร้อยละการเข้าเรียน <=69 : สีแดง
 
 ---
 
