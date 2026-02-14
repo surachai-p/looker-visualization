@@ -230,8 +230,8 @@
 5. ✅ คลิก "+ Join another table"
 
 6. ✅ **Table 3: subjects**
-   - Join Key: subject_code (จาก grades) = subject_code (จาก subjects)
-   - Join Type: Left Outer
+   - Join Key: subject_code (จาก grades) = subject_code (จาก subjects) และ teacher_id จาก grades กับ teacher_id จาก subjects
+   - Join Type: Left outer
 
 7. ✅ คลิก "Save"
 
