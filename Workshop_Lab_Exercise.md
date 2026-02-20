@@ -340,11 +340,6 @@ SUM(CASE WHEN status = "มาเรียน" THEN 1 ELSE 0 END) / COUNT(attend
 4. ✅ Breakdown Dimension: category
 5. ✅ Metric: SUM(budget_spent)
 
-### เพิ่ม Calculated Fields:
-```
-ชื่อฟิลด์: เปอร์เซ็นต์การใช้จ่าย
-Formula:
-SUM(budget_spent) / SUM(budget_allocated) * 100
 ```
 
 ### ผลลัพธ์ที่ควรได้:
@@ -353,39 +348,7 @@ SUM(budget_spent) / SUM(budget_allocated) * 100
 
 ---
 
-## Lab 3.6: Blend E-Document กับครู
-
-### วัตถุประสงค์:
-แสดงว่าครูแต่ละคนสร้างเอกสารอะไรบ้าง
-
-### ขั้นตอน:
-1. ✅ สร้าง Table
-2. ✅ Blend: **documents** + **teachers** 
-   - Join Key: created_by (จาก documents) = teacher_id (จาก teachers)
-
-3. ✅ Dimensions:
-   - teacher_name (จาก teachers)
-   - document_type (จาก documents)
-   - status (จาก documents)
-   - priority (จาก documents)
-
-4. ✅ Metrics:
-   - COUNT(document_id) → "จำนวนเอกสาร"
-
-### Calculated Field:
-```
-ชื่อฟิลด์: วันที่รออนุมัติ
-Formula:
-DATE_DIFF(CURRENT_DATE(), created_date)
-```
-
-### ผลลัพธ์ที่ควรได้:
-- [x] แสดงครูแต่ละคนสร้างเอกสารกี่ฉบับ
-- [x] แยกตามประเภทและสถานะ
-
----
-
-# 📄 ส่วนที่ 4: สร้าง Dashboard (120 นาที)
+# 📄 ส่วนที่ 4: สร้าง Dashboard
 
 ## Lab 4.1: Page 1 - ภาพรวมโรงเรียน
 
@@ -456,9 +419,10 @@ Formula: SUM(budget_remaining) / SUM(budget_allocated) * 100
    - AVG(grade) → "GPA เฉลี่ย"
 
 ### เพิ่ม Date Range Control:
-1. ✅ Insert → Date Range Control
+1. ✅ Add a control → Date Range Control
 2. ✅ วางตำแหน่งด้านบนขวา
 3. ✅ ตั้งค่า: แสดงเป็นช่วงเดือน
+4. สังเกตผลเมื่อเลือกช่วงวันที่เปลี่ยนไป Dashboard ส่วนอื่น ๆ จะเปลี่ยนแปลงข้อมูลตาม
 
 ### ผลลัพธ์สำหรับ Page 1:
 - [x] มี Scorecards 6 ตัวแสดงด้านบน
@@ -497,10 +461,10 @@ Formula: SUM(budget_remaining) / SUM(budget_allocated) * 100
 5. ✅ Sort: คะแนนเฉลี่ย (สูง → ต่ำ)
 
 ### Stacked Bar Chart: การกระจายเกรด
-1. ✅ Insert → Stacked Bar Chart
+1. ✅ Add a chart → Stacked Bar Chart
 2. ✅ Data Source: grades
 3. ✅ Dimension: subject_name
-4. ✅ Breakdown Dimension: grade (ต้องแปลงเป็น Text ก่อน)
+4. ✅ Breakdown Dimension: grade
 5. ✅ Metric: COUNT(record_id)
 
 ### Table: ผลการเรียนแต่ละห้อง
@@ -543,8 +507,8 @@ Formula: SUM(budget_remaining) / SUM(budget_allocated) * 100
    - COUNT(record_id) → "จำนวนวิชา"
 
 ### Filters สำหรับ Page นี้:
-1. ✅ Insert → Drop-down list
-2. ✅ เพิ่ม Filters:
+1. ✅ Insert → Drop-down list 3 ตัว เพื่อเลือกใช้กรองข้อมูล โดยเลือก data source ของ drop-down list แต่ละตัวตามข้อมูล Control field
+2. ✅ เพิ่ม Filters ข้อมูล โดยกำหนด Control filed ให้กับ Drop-down list แต่ละตัว:
    - grade_level (ระดับชั้น)
    - subject_name (วิชา)
    - semester (ภาคเรียน)
