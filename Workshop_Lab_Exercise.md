@@ -698,8 +698,6 @@ Formula: SUM(budget_spent) / SUM(budget_allocated) * 100
 1. ✅ Stacked Bar Chart (แนวนอน)
 2. ✅ Dimension: category
 
-```
-
 ### Pie Chart: สัดส่วนงบแต่ละแผนก
 1. ✅ Pie Chart
 2. ✅ Dimension: department
@@ -789,6 +787,7 @@ Formula: SUM(budget_spent) / SUM(budget_allocated) * 100
    - priority
    - department
 5. ✅ Calculated Field:
+   
 ```
 ชื่อ: วันที่รอ
 Formula: DATE_DIFF(CURRENT_DATE(), created_date)
@@ -804,8 +803,6 @@ Formula: DATE_DIFF(CURRENT_DATE(), created_date)
   - > 7 วัน: สีแดง
   - 4-7 วัน: สีเหลือง
   - < 4 วัน: สีเขียว
-
-```
 
 ### Filters สำหรับหน้านี้:
 1. ✅ Date Range Control (ช่วงวันที่สร้างเอกสาร)
